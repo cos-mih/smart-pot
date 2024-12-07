@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Monitor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"></script>
+</head>
+<body>
+    <h1>Temperature Monitor</h1>
+    <p>Current Temperature: <span id="temperature">--</span> °C</p>
+
+    <script>
+        // Connect to the WebSocket
+        const socket = io();
+
+        // Listen for the "update_temperature" event
+        socket.on("update_temperature", function(data) {
+            // Update the temperature display
+            document.getElementById("temperature").textContent = data.temperature;
+        });
+    </script>
+</body>
+</html>

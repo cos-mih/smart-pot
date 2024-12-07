@@ -1,0 +1,7 @@
+flask
+paho-mqtt
+network
+requests
+time
+machine
+dht
