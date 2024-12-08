@@ -1,9 +1,8 @@
 from flask import Flask, request, Response, jsonify, render_template
-from flask_socketio import SocketIO
 import paho.mqtt.client as mqtt
+import json
 
 app = Flask(__name__)
-socketio = SocketIO(app)
 
 data = {
     'temperature': 0,
@@ -11,7 +10,7 @@ data = {
     'light': 0
 }
 
-mqtt_server = '192.168.43.211'
+mqtt_server = '192.168.0.11'
 port = 1883
 data_topic = 'data/#'
 
@@ -21,6 +20,10 @@ def index():
     global data
     return render_template('index.html', temperature=data['temperature'], humidity=data['humidity'], light=data['light'])
 
+@app.route("/update")
+def get_data():
+    return jsonify(data)
+
 
 def on_connect(client, userdata, flags, reason_code, properties):
     print(f'Connected with result code {reason_code}')
@@ -28,10 +31,13 @@ def on_connect(client, userdata, flags, reason_code, properties):
 
 def on_message(client, userdata, msg):
     global data
-    topic = msg.topic.split('/')[-1]
-    data[topic] = int(str(msg.payload)[2:-1])
-    print(f'{topic}: {str(msg.payload)}, {data[topic]}')
-    socketio.emit("update", {topic: data[topic]})
+    device_id = msg.topic.split('/')[-1]
+    json_data = json.loads(msg.payload)
+    data['temperature'] = json_data.get('temperature', data['temperature'])
+    data['humidity'] = json_data.get('humidity', data['humidity'])
+    data['light'] = json_data.get('light', data['light'])
+
+    print(f'{device_id}: {json_data}')
 
 
 if __name__=='__main__':
@@ -43,5 +49,5 @@ if __name__=='__main__':
 
     mqttc.loop_start()
 
-    socketio.run('127.0.0.1', port=5000, debug=True)
+    app.run('127.0.0.1', port=5000, debug=True)
 

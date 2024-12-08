@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Pot Monitor</title>
+    <style>
+      body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #9caf88; /* Sage-green background */
+            color: white; /* Default text color */
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.5rem;
+            margin: 10px 0;
+        }
+        .data-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Space between the data containers */
+            align-items: center;
+        }
+        .data-container {
+            display: inline-block;
+            background-color: #f5f5dc; /* Beige background */
+            border: 3px solid #a67c52; /* Golden-brown border */
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px;
+            color: #a67c52; /* White text */
+            font-weight: bold;
+            font-size: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        .loading {
+            color: white;
+            font-size: 1rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+  </style>
+</head>
+<body>
+    <h1>Plant Environment Monitor</h1>
+    <div class="data-wrapper">
+        <div class="data-container">
+            Temperature: <span id="temperature">0</span> °C
+        </div>
+        <div class="data-container">
+            Soil humidity: <span id="humidity">0</span>
+        </div>
+        <div class="data-container">
+            Light intensity: <span id="light">0</span>
+        </div>
+    </div>
+    <p id="status" class="loading">Fetching data...</p>
+
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch('/update');
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                
+                const data = await response.json();
+
+                document.getElementById('temperature').textContent = data.temperature ?? '0';
+                document.getElementById('humidity').textContent = data.humidity ?? '0';
+                document.getElementById('light').textContent = data.light ?? '0';
+                document.getElementById('status').textContent = '';
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                document.getElementById('status').textContent = 'Error fetching data. Retrying...';
+            }
+        }
+        setInterval(fetchData, 2000);
+        fetchData();
+      </script>
+</body>
+</html>

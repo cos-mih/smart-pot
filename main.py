@@ -4,19 +4,25 @@ import time
 from machine import Pin, ADC
 from simple import MQTTClient
 import dht
+import json
 
-ssid = ''
-password = ''
+ssid = 'didi'
+password = '87654321'
 
-mqtt_server = ''
+mqtt_server = '192.168.43.211'
 client_id = 'esp32-1'
 
-temp_topic = 'data/temperature'
-soil_topic = 'data/humidity'
-light_topic = 'data/light'
+data_topic = 'data/' + client_id
 
 temp_sensor = dht.DHT11(Pin(22))
 soil_humidity_sensor = ADC(Pin(35))
+light_sensor = ADC(Pin(34))
+
+data = {
+    'temperature': 0,
+    'humidity': 0,
+    'light': 0
+}
 
 def connect_to_wifi():
     wlan = network.WLAN(network.STA_IF)
@@ -37,21 +43,18 @@ if __name__=='__main__':
 
     print(f'Connected to MQTT server at: {mqtt_server}')
 
- 
     while True:
         try:
             temp_sensor.measure()
-            temp = temp_sensor.temperature()
-            client.publish(temp_topic, f'{temp}')
-            print(f'Temperature: {temp}\n')
+            data['temperature'] = temp_sensor.temperature()
         except OSError as e:
             print('Failed to read temperature sensor.')
-
-
-        humidity = soil_humidity_sensor.read_u16()
-        client.publish(soil_topic, f'{humidity}')
-        print(f'Soil humidity: {humidity}')
+        data['humidity'] = soil_humidity_sensor.read_u16()
+        data['light'] = light_sensor.read_u16()
+       
+        client.publish(data_topic, json.dumps(data))
+        print(f'Temperature: {data['temperature']}\nHumidity: {data['humidity']}\nLight: {data['light']}\n')
 
         time.sleep(2)
 
-    client.disconnect()
+
