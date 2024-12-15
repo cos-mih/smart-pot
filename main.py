@@ -6,8 +6,8 @@ from simple import MQTTClient
 import dht
 import json
 
-ssid = 'didi'
-password = '87654321'
+ssid = '-'
+password = '-'
 
 mqtt_server = '192.168.43.211'
 client_id = 'esp32-1'
