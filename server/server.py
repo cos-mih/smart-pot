@@ -10,7 +10,7 @@ data = {
     'light': 0
 }
 
-mqtt_server = '192.168.0.11'
+mqtt_server = '192.168.43.211'
 port = 1883
 data_topic = 'data/#'
 

@@ -13,3 +13,7 @@ ESP32 code in main.py:
        sensor and photoresistor;
     -> initiate WiFi connection, then read data from sensors in a loop and publish messages
        to the data/<device_id> topic for the server to receive.
+
+       
+
+mosquitto -v -c “C:\Program Files\mosquitto\mosquitto.conf”

@@ -6,8 +6,13 @@ from simple import MQTTClient
 import dht
 import json
 
-ssid = '-'
-password = '-'
+LIGHT_MAX = 65535
+
+HUMIDITY_MAX = 65535
+HUMIDITY_MIN = 57000
+
+ssid = 'didi'
+password = '87654321'
 
 mqtt_server = '192.168.43.211'
 client_id = 'esp32-1'
@@ -34,6 +39,13 @@ def connect_to_wifi():
             time.sleep(1)
     print('Connected to Wi-Fi:', wlan.ifconfig())
 
+def get_light_percentage(value):
+    p = value / LIGHT_MAX * 100
+    return round(p, 2)
+
+def get_humidity_percentage(value):
+    p = 100 - (value - HUMIDITY_MIN) / (HUMIDITY_MAX - HUMIDITY_MIN) * 100
+    return round(p, 2)
 
 if __name__=='__main__':
     connect_to_wifi()
@@ -49,8 +61,8 @@ if __name__=='__main__':
             data['temperature'] = temp_sensor.temperature()
         except OSError as e:
             print('Failed to read temperature sensor.')
-        data['humidity'] = soil_humidity_sensor.read_u16()
-        data['light'] = light_sensor.read_u16()
+        data['humidity'] = get_humidity_percentage(soil_humidity_sensor.read_u16())
+        data['light'] = get_light_percentage(light_sensor.read_u16())
        
         client.publish(data_topic, json.dumps(data))
         print(f'Temperature: {data['temperature']}\nHumidity: {data['humidity']}\nLight: {data['light']}\n')
