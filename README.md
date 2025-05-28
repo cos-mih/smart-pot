@@ -17,3 +17,4 @@ ESP32 code in main.py:
        
 
 mosquitto -v -c “C:\Program Files\mosquitto\mosquitto.conf”
+
