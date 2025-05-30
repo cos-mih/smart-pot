@@ -5,7 +5,11 @@ Server implemented in Pyhton using Flask, in server.py:
        updates the global data dictionary with new data from each received message;
     -> data is displayed on the root page, defined in index.html; data is periodically
        requested from the exposed API, at the /update route, to account for new incoming
-       data from the Smart Pots.
+       data from the Smart Pots;
+    -> index.html includes a JavaScript script that defines 3 graphics and corresponding
+       plugins using Chart.js, and the fetchDataAndUpdate() function which sends requests
+       to the API and then updates the charts' elements with the new data.
+
 
 ESP32 code in main.py:
     -> using the MQTT client implementation in simple.py;
@@ -15,6 +19,4 @@ ESP32 code in main.py:
        to the data/<device_id> topic for the server to receive.
 
        
-
-mosquitto -v -c “C:\Program Files\mosquitto\mosquitto.conf”
 
