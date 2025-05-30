@@ -12,8 +12,8 @@
             font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 20px;
-            background-color: #fafff6;
-            color: rgb(14, 104, 4);
+            background-color: #e5f9ff;
+            color: rgb(2, 70, 122);
         }
         h1 {
             font-size: 2rem;
@@ -28,17 +28,16 @@
             padding: 10px;
         }
         .metric-container {
-            background-color: #afe9b3;
-            border: 3px solid #ff8000;
-            border-radius: 15px;
+            background-color: #bce0ff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
             padding: 20px;
             margin: 10px;
-            color: rgb(14, 104, 4);
+            color: rgb(2, 70, 122);
             font-weight: bold;
             font-size: 1.2rem;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-            width: 320px;
-            min-height: 300px; 
+            width: 400px;
+            min-height: 400px; 
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -55,74 +54,144 @@
         }
         #temp-chart-container{
             width: 100%;
-            height: 150px;
+            height: 250px;
             margin-top: auto;
         }
         #humidity-gauge-container, #light-meter-container {
             width: 100%;
-            height: 150px;
+            height: 250px;
             margin-top: 10px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            overflow: visible;
+            position: relative;
         }
         #temp-chart {
             max-width: 100%;
-            height: 150px !important;
+            height: 250px !important;
         }
         #humidity-gauge {
-             width: 150px !important;
-             height: 150px !important;
+            width: 250px !important;
+            height: 250px !important;
+            overflow: visible;
         }
         .light-meter {
-            width: 80%;
-            height: 30px;
-            background-color: #e0e0e0;
-            border-radius: 15px;
+            width: 150px;
+            height: 200px;
+            background-color: rgba(14, 104, 4, 0.1);
             overflow: hidden;
             border: 1px solid #ccc;
-            margin-top: 10px;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
         }
         .light-level {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(to right, #FFFACD, #FFD700, #FFA500, #FF8C00);
-            border-radius: 15px 0 0 15px;
-            transition: width 0.5s ease-in-out;
+            width: 100%;
+            height: 0%;
+            background: #ff6384;
+            transition: height 0.5s ease-in-out;
+        }
+        .light-gradation {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #999;
+            opacity: 0.6;
+        }
+        .light-labels {
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .light-labels .label {
+            font-size: 0.75rem;
+            color: #000000;
         }
         .status {
-            color: rgb(14, 104, 4, 0.7);
+            color: rgba(99, 5, 52, 0.7);
             font-size: 1rem;
             margin-top: 20px;
+        }
+        .metric-info-box {
+            background-color: white;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            width: 80%;
+            box-sizing: border-box;
+        }
+        .metric-info-box h2 {
+            font-size: 1.5rem;
+            margin: 0 0 10px 0;
+            font-weight: 900;
+            color: rgb(2, 70, 122);
+        }
+        .metric-info-box .current-value {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #ff6384;
         }
     </style>
 </head>
 <body>
-    <h1>Smart Pot Monitor</h1>
+    <h1 style="font-weight: 900;">Smart Pot Monitor</h1>
     <div class="dashboard-container">
         <div class="metric-container">
-            <h2>Temperature</h2>
-            <div class="current-value"><span id="temperature">0</span> °C</div>
-            <div id="temp-chart-container">
-                <canvas id="temp-chart"></canvas>
+            <div class="metric-info-box">
+                <h2>Temperature</h2>
+                <div class="current-value"><span id="temperature">0</span> °C</div>
+            </div>
+            <div class="metric-info-box">
+                <div id="temp-chart-container">
+                    <canvas id="temp-chart"></canvas>
+                </div>
             </div>
         </div>
 
         <div class="metric-container">
-            <h2>Humidity</h2>
-            <div class="current-value"><span id="humidity">0</span>%</div>
-            <div id="humidity-gauge-container">
-                <canvas id="humidity-gauge"></canvas>
+            <div class="metric-info-box">
+                <h2>Humidity</h2>
+                <div class="current-value"><span id="humidity">0</span>%</div>
+            </div>
+            <div class="metric-info-box">
+                <div id="humidity-gauge-container">
+                    <canvas id="humidity-gauge"></canvas>
+                </div>
             </div>
         </div>
 
         <div class="metric-container">
-            <h2>Light Intensity</h2>
-            <div class="current-value"><span id="light">0</span>%</div>
-            <div id="light-meter-container">
-                <div class="light-meter">
-                    <div id="light-level" class="light-level"></div>
+            <div class="metric-info-box">
+                <h2>Light Intensity</h2>
+                <div class="current-value"><span id="light">0</span>%</div>
+            </div>
+            <div class="metric-info-box">
+                <div id="light-meter-container">
+                    <div id="light-meter-wrapper" style="display: flex; align-items: flex-end; gap: 10px;">
+                        <div class="light-meter">
+                            <div id="light-level" class="light-level"></div>
+                            <div class="light-gradation" style="bottom: 0%;"></div>
+                            <div class="light-gradation" style="bottom: 20%;"></div>
+                            <div class="light-gradation" style="bottom: 40%;"></div>
+                            <div class="light-gradation" style="bottom: 60%;"></div>
+                            <div class="light-gradation" style="bottom: 80%;"></div>
+                            <div class="light-gradation" style="bottom: 100%;"></div>
+                        </div>
+
+                        <div class="light-labels">
+                            <div class="label">100%</div>
+                            <div class="label">80%</div>
+                            <div class="label">60%</div>
+                            <div class="label">40%</div>
+                            <div class="label">20%</div>
+                            <div class="label">0%</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -139,7 +208,7 @@
                 datasets: [{
                     label: 'Temperature (°C)',
                     data: [],
-                    borderColor: 'rgb(14, 104, 4)',
+                    borderColor: 'rgb(2, 70, 122)',
                     backgroundColor: 'rgba(14, 104, 4, 0.1)',
                     borderWidth: 2,
                     fill: true,
@@ -171,6 +240,8 @@
                     },
                     y: {
                         beginAtZero: false,
+                        min: 0,
+                        max: 40,
                         ticks: { color: 'rgb(14, 104, 4)' },
                         grid: { color: 'rgba(14, 104, 4, 0.2)' }
                     }
@@ -178,12 +249,78 @@
                 plugins: {
                     legend: {
                         display: true,
-                        position: 'bottom', // Changed position
+                        position: 'bottom', 
                         labels: { color: 'rgb(14, 104, 4)' }
                     }
                 }
             }
         });
+
+
+        const gaugeTicksPlugin = {
+            id: 'gaugeTicks',
+            afterDraw(chart, args, options) {
+                const { ctx, chartArea: { width, height } } = chart;
+                const cx = chart.width / 2;
+                const cy = chart.height - 65;
+                const outerRadius = chart._metasets[0].data[0].outerRadius;
+                const innerRadius = chart._metasets[0].data[0].innerRadius;
+                const tickLength = 10;
+                const labelOffset = 10;
+
+                ctx.save();
+                ctx.font = 'bold 12px Arial';
+                ctx.fillStyle = '#444';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                for (let i = 20; i <= 80; i += 20) {
+                    const angle = Math.PI * (1 - i / 100);
+                    const x1 = cx + outerRadius * Math.cos(angle);
+                    const y1 = cy - outerRadius * Math.sin(angle);
+                    const x2 = cx + (outerRadius - tickLength) * Math.cos(angle);
+                    const y2 = cy - (outerRadius - tickLength) * Math.sin(angle);
+
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = '#666';
+                    ctx.stroke();
+
+                    const labelX = cx + (outerRadius + labelOffset) * Math.cos(angle);
+                    const labelY = cy - (outerRadius + labelOffset) * Math.sin(angle);
+                    ctx.fillText(i + '%', labelX, labelY);
+                }
+
+                ctx.restore();
+            }
+        };
+
+        const needlePlugin = {
+            id: 'gaugeNeedle',
+            afterDraw(chart, args, options) {
+                const { ctx, chartArea: { width, height } } = chart;
+                const needleValue = chart.data.datasets[0].data[0];
+                const angle = (Math.PI * (1 - (needleValue / 100))); 
+
+                const cx = chart.width / 2;
+                const cy = chart.height - 65;
+
+                const needleLength = chart._metasets[0].data[0].outerRadius * 0.9;
+                const x = cx + needleLength * Math.cos(angle);
+                const y = cy - needleLength * Math.sin(angle);
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(x, y);
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = '#ff0000';
+                ctx.stroke();
+                ctx.restore();
+            }
+        };
 
         const humidityCtx = document.getElementById('humidity-gauge').getContext('2d');
         const humidityGauge = new Chart(humidityCtx, {
@@ -192,7 +329,7 @@
                 labels: ['Humidity', 'Remaining'],
                 datasets: [{
                     data: [0, 100],
-                    backgroundColor: ['#0E6804', '#E0E0E0'],
+                    backgroundColor: ['rgba(14, 104, 4, 0.1)', 'rgba(14, 104, 4, 0.1)'],
                     borderColor: ['#afe9b3', '#afe9b3'],
                     borderWidth: 2,
                     circumference: 180,
@@ -207,10 +344,11 @@
                     legend: { display: false },
                     tooltip: { enabled: false }
                 }
-            }
+            },
+            plugins: [needlePlugin, gaugeTicksPlugin] 
         });
 
-        function getHumiditySectorColor(humidity) {
+        function getPercentageColor(humidity) {
             if (humidity < 30) return '#FF6384';
             if (humidity < 70) return '#FFCE56'; 
             return '#4BC0C0';
@@ -219,12 +357,9 @@
         const lightLevelIndicator = document.getElementById('light-level');
         function updateLightMeter(lightPercentage) {
             const percentage = Math.max(0, Math.min(100, lightPercentage));
-            lightLevelIndicator.style.width = percentage + '%';
-            if (percentage >= 99) {
-                lightLevelIndicator.style.borderRadius = '15px';
-            } else {
-                lightLevelIndicator.style.borderRadius = '15px 0 0 15px';
-            }
+            const color = getPercentageColor(percentage);
+            lightLevelIndicator.style.height = percentage + '%';
+            lightLevelIndicator.style.backgroundColor = color;
         }
 
         async function fetchDataAndUpdate() {
@@ -242,7 +377,7 @@
                 document.getElementById('humidity').textContent = humidityValue.toFixed(0);
                 humidityGauge.data.datasets[0].data[0] = humidityValue;
                 humidityGauge.data.datasets[0].data[1] = Math.max(0, 100 - humidityValue);
-                humidityGauge.data.datasets[0].backgroundColor[0] = getHumiditySectorColor(humidityValue);
+                humidityGauge.data.datasets[0].backgroundColor[0] = getPercentageColor(humidityValue);
                 humidityGauge.update('none');
 
                 const lightValue = data.light !== undefined ? parseFloat(data.light) : 0;
@@ -250,7 +385,7 @@
                 updateLightMeter(lightValue);
 
                 document.getElementById('status').textContent = 'Last updated: ' + new Date().toLocaleTimeString();
-                document.getElementById('status').style.color = 'rgb(14, 104, 4)';
+                document.getElementById('status').style.color = 'rgba(99, 5, 52, 0.7)';
 
             } catch (error) {
                 console.error('Error fetching data:', error);
